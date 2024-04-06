@@ -159,11 +159,11 @@
     {
         "id": "b393f35ae74b6241",
         "type": "ui_group",
-        "name": "Group 2",
-        "tab": "11a6dcabfb56850d",
-        "order": 2,
+        "name": "Gráficos",
+        "tab": "6c3063de6b44db72",
+        "order": 3,
         "disp": true,
-        "width": "12",
+        "width": "20",
         "collapse": false,
         "className": ""
     },
@@ -193,13 +193,22 @@
         "passwordFieldType": "str"
     },
     {
-        "id": "355f197bd04e1eb9",
+        "id": "6c3063de6b44db72",
+        "type": "ui_tab",
+        "name": "Tab 2",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "e8192717fdd43381",
         "type": "ui_group",
-        "name": "Default",
-        "tab": "11a6dcabfb56850d",
-        "order": 3,
+        "name": "Filtros",
+        "tab": "6c3063de6b44db72",
+        "order": 2,
         "disp": true,
-        "width": "6",
+        "width": "5",
         "collapse": false,
         "className": ""
     },
@@ -230,7 +239,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 1",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": true,
@@ -352,8 +361,8 @@
         "type": "ui_chart",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "group": "b393f35ae74b6241",
-        "order": 1,
+        "group": "bba8abb3efe5e226",
+        "order": 2,
         "width": 0,
         "height": 0,
         "label": "Consumo KWh",
@@ -409,42 +418,11 @@
         "wires": []
     },
     {
-        "id": "4d864b113ccc8d29",
-        "type": "inject",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 140,
-        "y": 500,
-        "wires": [
-            [
-                "51448dfe2c8a0513",
-                "d8efac61362ca361",
-                "f722e5c3b482f5e7"
-            ]
-        ]
-    },
-    {
         "id": "0b6aceeb98c9ca95",
         "type": "ui_text",
         "z": "1c8b0c202345de2d",
         "group": "bba8abb3efe5e226",
-        "order": 1,
+        "order": 3,
         "width": 0,
         "height": 0,
         "name": "",
@@ -465,16 +443,17 @@
         "type": "postgresql",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '2024-01-01' and '2024-02-01'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.payload.start_date }}}' and '{{{ msg.payload.end_date }}}'\nGROUP BY simple_date\nORDER BY simple_date;",
         "postgreSQLConfig": "9973bf030ca284b8",
         "split": false,
         "rowsPerMsg": 1,
         "outputs": 1,
-        "x": 370,
-        "y": 460,
+        "x": 670,
+        "y": 520,
         "wires": [
             [
-                "200f9076be604bc5"
+                "200f9076be604bc5",
+                "b255ada061bae768"
             ]
         ]
     },
@@ -482,8 +461,8 @@
         "id": "8379cdb7fe2d6260",
         "type": "debug",
         "z": "1c8b0c202345de2d",
-        "name": "debug 5",
-        "active": true,
+        "name": "Query Anual",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": true,
@@ -491,8 +470,8 @@
         "targetType": "msg",
         "statusVal": "payload",
         "statusType": "auto",
-        "x": 560,
-        "y": 620,
+        "x": 710,
+        "y": 440,
         "wires": []
     },
     {
@@ -501,10 +480,10 @@
         "z": "1c8b0c202345de2d",
         "name": "",
         "group": "b393f35ae74b6241",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
-        "label": "chart",
+        "label": "Consumo Por Dia no mês",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -533,8 +512,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 750,
-        "y": 460,
+        "x": 1110,
+        "y": 520,
         "wires": [
             []
         ]
@@ -551,8 +530,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 460,
+        "x": 860,
+        "y": 520,
         "wires": [
             [
                 "237168cf1d013dc0"
@@ -560,33 +539,17 @@
         ]
     },
     {
-        "id": "d846bda0d5e9deb3",
-        "type": "debug",
-        "z": "1c8b0c202345de2d",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 760,
-        "y": 620,
-        "wires": []
-    },
-    {
         "id": "d8efac61362ca361",
         "type": "postgresql",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "query": "SELECT date_trunc('month', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '2023-01-01' and '2024-01-01'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "query": "SELECT date_trunc('month', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.payload.start_date }}}' and '{{{ msg.payload.end_date }}}'\nGROUP BY simple_date\nORDER BY simple_date;",
         "postgreSQLConfig": "9973bf030ca284b8",
         "split": false,
         "rowsPerMsg": 1,
         "outputs": 1,
-        "x": 370,
-        "y": 560,
+        "x": 510,
+        "y": 400,
         "wires": [
             [
                 "2ab8321d2c363dbb",
@@ -606,12 +569,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 560,
+        "x": 700,
+        "y": 400,
         "wires": [
             [
-                "162adb48bfcbd99d",
-                "d846bda0d5e9deb3"
+                "162adb48bfcbd99d"
             ]
         ]
     },
@@ -621,10 +583,90 @@
         "z": "1c8b0c202345de2d",
         "name": "",
         "group": "b393f35ae74b6241",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
-        "label": "chart",
+        "label": "Consumo Anual",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": true,
+        "useUTC": false,
+        "colors": [
+            "#ff8000",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 920,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f722e5c3b482f5e7",
+        "type": "postgresql",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp  BETWEEN '2024-04-03 00:00:000' and '2024-04-04 00:00:000'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "postgreSQLConfig": "9973bf030ca284b8",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 330,
+        "y": 940,
+        "wires": [
+            [
+                "19b04c091f966890",
+                "e58d8b8f2a39a469"
+            ]
+        ]
+    },
+    {
+        "id": "19b04c091f966890",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "debug 7",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 540,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "cfbf0969652138f2",
+        "type": "ui_chart",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "group": "bba8abb3efe5e226",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Consumo Diário por Hora",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -654,57 +696,79 @@
         "useDifferentColor": false,
         "className": "",
         "x": 750,
-        "y": 560,
+        "y": 960,
         "wires": [
             []
         ]
     },
     {
-        "id": "f722e5c3b482f5e7",
-        "type": "postgresql",
+        "id": "e58d8b8f2a39a469",
+        "type": "function",
         "z": "1c8b0c202345de2d",
-        "name": "",
-        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp  BETWEEN '2024-04-03 00:00:000' and '2024-04-04 00:00:000'\nGROUP BY simple_date\nORDER BY simple_date;",
-        "postgreSQLConfig": "9973bf030ca284b8",
-        "split": false,
-        "rowsPerMsg": 1,
+        "name": "function 6",
+        "func": "const data = msg.payload;\nconst hours = [];\nconst consumos = [];\n\nconst getDate = (date) => date.getHours();\n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    hours.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': hours,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
         "outputs": 1,
-        "x": 370,
-        "y": 700,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 960,
         "wires": [
             [
-                "19b04c091f966890",
-                "e58d8b8f2a39a469"
+                "cfbf0969652138f2"
             ]
         ]
     },
     {
-        "id": "19b04c091f966890",
-        "type": "debug",
+        "id": "b99f2aadfe5216f0",
+        "type": "postgresql",
         "z": "1c8b0c202345de2d",
-        "name": "debug 7",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "payload",
-        "statusType": "auto",
-        "x": 580,
-        "y": 760,
-        "wires": []
+        "name": "",
+        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.start_date }}}' and '2024-02-01'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "postgreSQLConfig": "9973bf030ca284b8",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 330,
+        "y": 800,
+        "wires": [
+            [
+                "3a9f0f6325f5dfa0"
+            ]
+        ]
     },
     {
-        "id": "cfbf0969652138f2",
+        "id": "3a9f0f6325f5dfa0",
+        "type": "function",
+        "z": "1c8b0c202345de2d",
+        "name": "function 7",
+        "func": "const data = msg.payload;\nconst days = [];\nconst consumos = [];\n\nconst getDate = (date) => {\n    const day = date.getDate();\n    const month = date.getMonth() + 1; \n    const year = date.getFullYear();\n    return `${day}/${month}/${year}`;\n} \n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    days.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': days,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 800,
+        "wires": [
+            [
+                "5af3b8d1e3098e36"
+            ]
+        ]
+    },
+    {
+        "id": "5af3b8d1e3098e36",
         "type": "ui_chart",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "group": "bba8abb3efe5e226",
+        "group": "b393f35ae74b6241",
         "order": 2,
         "width": 0,
         "height": 0,
-        "label": "chart",
+        "label": "Consumo Por Dia no mês (2)",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -733,30 +797,322 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 730,
-        "y": 700,
+        "x": 780,
+        "y": 800,
         "wires": [
             []
         ]
     },
     {
-        "id": "e58d8b8f2a39a469",
+        "id": "59f78be21d79c51d",
+        "type": "ui_date_picker",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "label": "date",
+        "group": "bba8abb3efe5e226",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 310,
+        "y": 700,
+        "wires": [
+            [
+                "e6cb2ad045042a8c"
+            ]
+        ]
+    },
+    {
+        "id": "e6cb2ad045042a8c",
         "type": "function",
         "z": "1c8b0c202345de2d",
-        "name": "function 6",
-        "func": "const data = msg.payload;\nconst hours = [];\nconst consumos = [];\n\nconst getDate = (date) => date.getHours();\n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    hours.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': hours,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
+        "name": "function convert",
+        "func": "var dt = new Date(msg.payload);\ndt = dt.toJSON().split(\"T\")[0];\nmsg.start_date = dt;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 580,
+        "x": 540,
         "y": 700,
         "wires": [
             [
-                "cfbf0969652138f2"
+                "b99f2aadfe5216f0",
+                "53e4644fa64a5652"
             ]
         ]
+    },
+    {
+        "id": "53e4644fa64a5652",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "debug data dinâmica",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "65a92efb5f4bb2f5",
+        "type": "ui_dropdown",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "label": "Mês de análise",
+        "tooltip": "",
+        "place": "Selecione o mês",
+        "group": "e8192717fdd43381",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Janeiro",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "Fevereiro",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "Março",
+                "value": 2,
+                "type": "num"
+            },
+            {
+                "label": "Abril",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "Maio",
+                "value": 4,
+                "type": "num"
+            },
+            {
+                "label": "Junho",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "Julho",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "Agosto",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "Setembro",
+                "value": 8,
+                "type": "num"
+            },
+            {
+                "label": "Outubro",
+                "value": 9,
+                "type": "num"
+            },
+            {
+                "label": "Novembro",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "Dezembro",
+                "value": "11",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "mes",
+        "topicType": "str",
+        "className": "",
+        "x": 140,
+        "y": 520,
+        "wires": [
+            [
+                "27c01f383fc2c654"
+            ]
+        ]
+    },
+    {
+        "id": "f219e2644884d98a",
+        "type": "ui_dropdown",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "label": "Ano de Análise",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "e8192717fdd43381",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "2022",
+                "value": 2022,
+                "type": "num"
+            },
+            {
+                "label": "2023",
+                "value": 2023,
+                "type": "num"
+            },
+            {
+                "label": "2024",
+                "value": 2024,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "ano",
+        "topicType": "str",
+        "className": "",
+        "x": 140,
+        "y": 400,
+        "wires": [
+            [
+                "21abe247ba399a11",
+                "27c01f383fc2c654"
+            ]
+        ]
+    },
+    {
+        "id": "21abe247ba399a11",
+        "type": "function",
+        "z": "1c8b0c202345de2d",
+        "name": "function 8",
+        "func": "const selectedYear = msg.payload;\n\nmsg.payload = {\n    'start_date': `${selectedYear}-01-01 00:00:00`,\n    'end_date': `${selectedYear+1}-01-01 00:00:00`,\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 400,
+        "wires": [
+            [
+                "d8efac61362ca361"
+            ]
+        ]
+    },
+    {
+        "id": "b255ada061bae768",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "Query Mensal",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 880,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "e44fc80ab0c7e5c4",
+        "type": "function",
+        "z": "1c8b0c202345de2d",
+        "name": "function 9",
+        "func": "const selectedYear = msg.payload.ano ? msg.payload.ano : 2024;\nconst actualMonth = msg.payload.mes ? msg.payload.mes + 1 : 1;\nconst nextMonth = actualMonth + 1;\nmsg.payload = {\n    'start_date': `${selectedYear}-${actualMonth}-01`,\n    'end_date': `${selectedYear}-${nextMonth}-01`,\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 520,
+        "wires": [
+            [
+                "51448dfe2c8a0513",
+                "17c8847a090c4c20"
+            ]
+        ]
+    },
+    {
+        "id": "27c01f383fc2c654",
+        "type": "join",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 340,
+        "y": 520,
+        "wires": [
+            [
+                "e44fc80ab0c7e5c4",
+                "ff4cc9834c46be3c"
+            ]
+        ]
+    },
+    {
+        "id": "ff4cc9834c46be3c",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "17c8847a090c4c20",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 600,
+        "wires": []
     }
 ]
