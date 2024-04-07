@@ -480,7 +480,7 @@
         "z": "1c8b0c202345de2d",
         "name": "",
         "group": "b393f35ae74b6241",
-        "order": 3,
+        "order": 2,
         "width": 0,
         "height": 0,
         "label": "Consumo Por Dia no mês",
@@ -622,120 +622,21 @@
         ]
     },
     {
-        "id": "f722e5c3b482f5e7",
-        "type": "postgresql",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp  BETWEEN '2024-04-03 00:00:000' and '2024-04-04 00:00:000'\nGROUP BY simple_date\nORDER BY simple_date;",
-        "postgreSQLConfig": "9973bf030ca284b8",
-        "split": false,
-        "rowsPerMsg": 1,
-        "outputs": 1,
-        "x": 330,
-        "y": 940,
-        "wires": [
-            [
-                "19b04c091f966890",
-                "e58d8b8f2a39a469"
-            ]
-        ]
-    },
-    {
-        "id": "19b04c091f966890",
-        "type": "debug",
-        "z": "1c8b0c202345de2d",
-        "name": "debug 7",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "payload",
-        "statusType": "auto",
-        "x": 540,
-        "y": 1020,
-        "wires": []
-    },
-    {
-        "id": "cfbf0969652138f2",
-        "type": "ui_chart",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "group": "bba8abb3efe5e226",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "label": "Consumo Diário por Hora",
-        "chartType": "bar",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": true,
-        "useUTC": false,
-        "colors": [
-            "#ff8000",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 750,
-        "y": 960,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "e58d8b8f2a39a469",
-        "type": "function",
-        "z": "1c8b0c202345de2d",
-        "name": "function 6",
-        "func": "const data = msg.payload;\nconst hours = [];\nconst consumos = [];\n\nconst getDate = (date) => date.getHours();\n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    hours.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': hours,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 960,
-        "wires": [
-            [
-                "cfbf0969652138f2"
-            ]
-        ]
-    },
-    {
         "id": "b99f2aadfe5216f0",
         "type": "postgresql",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.start_date }}}' and '2024-02-01'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN date '{{{ msg.start_date }}}' and '{{{ msg.end_date}}}'\nGROUP BY simple_date\nORDER BY simple_date;",
         "postgreSQLConfig": "9973bf030ca284b8",
         "split": false,
         "rowsPerMsg": 1,
         "outputs": 1,
-        "x": 330,
-        "y": 800,
+        "x": 570,
+        "y": 680,
         "wires": [
             [
-                "3a9f0f6325f5dfa0"
+                "3a9f0f6325f5dfa0",
+                "fcb0eb222bc0388e"
             ]
         ]
     },
@@ -744,15 +645,15 @@
         "type": "function",
         "z": "1c8b0c202345de2d",
         "name": "function 7",
-        "func": "const data = msg.payload;\nconst days = [];\nconst consumos = [];\n\nconst getDate = (date) => {\n    const day = date.getDate();\n    const month = date.getMonth() + 1; \n    const year = date.getFullYear();\n    return `${day}/${month}/${year}`;\n} \n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    days.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': days,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
+        "func": "const data = msg.payload;\nconst horas = [];\nconst consumos = [];\n\nconst getDate = (date) => {\n    return date.getUTCHours();\n} \n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    horas.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': horas,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 800,
+        "x": 760,
+        "y": 680,
         "wires": [
             [
                 "5af3b8d1e3098e36"
@@ -764,11 +665,11 @@
         "type": "ui_chart",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "group": "b393f35ae74b6241",
-        "order": 2,
+        "group": "bba8abb3efe5e226",
+        "order": 6,
         "width": 0,
         "height": 0,
-        "label": "Consumo Por Dia no mês (2)",
+        "label": "Consumo Por Hora",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -797,32 +698,10 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 780,
-        "y": 800,
+        "x": 950,
+        "y": 680,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "59f78be21d79c51d",
-        "type": "ui_date_picker",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "label": "date",
-        "group": "bba8abb3efe5e226",
-        "order": 5,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "className": "",
-        "x": 310,
-        "y": 700,
-        "wires": [
-            [
-                "e6cb2ad045042a8c"
-            ]
         ]
     },
     {
@@ -830,38 +709,20 @@
         "type": "function",
         "z": "1c8b0c202345de2d",
         "name": "function convert",
-        "func": "var dt = new Date(msg.payload);\ndt = dt.toJSON().split(\"T\")[0];\nmsg.start_date = dt;\nreturn msg;",
+        "func": "var dt = new Date(msg.payload);\nvar day = dt.getDate();\nvar month = dt.getMonth() + 1;\nvar year = dt.getFullYear();\n\nmsg.start_date = `${year}-${month}-${day}`;\nmsg.end_date = `${year}-${month}-${day+1}`;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 700,
+        "x": 360,
+        "y": 680,
         "wires": [
             [
-                "b99f2aadfe5216f0",
-                "53e4644fa64a5652"
+                "b99f2aadfe5216f0"
             ]
         ]
-    },
-    {
-        "id": "53e4644fa64a5652",
-        "type": "debug",
-        "z": "1c8b0c202345de2d",
-        "name": "debug data dinâmica",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 860,
-        "y": 700,
-        "wires": []
     },
     {
         "id": "65a92efb5f4bb2f5",
@@ -1087,7 +948,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 8",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1104,7 +965,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 9",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1113,6 +974,73 @@
         "statusType": "auto",
         "x": 680,
         "y": 600,
+        "wires": []
+    },
+    {
+        "id": "06d379968e454bf1",
+        "type": "ui_date_picker",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "label": "date",
+        "group": "bba8abb3efe5e226",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 210,
+        "y": 720,
+        "wires": [
+            [
+                "e6cb2ad045042a8c"
+            ]
+        ]
+    },
+    {
+        "id": "bfb81efe6144920b",
+        "type": "inject",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 680,
+        "wires": [
+            [
+                "e6cb2ad045042a8c"
+            ]
+        ]
+    },
+    {
+        "id": "fcb0eb222bc0388e",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 740,
         "wires": []
     }
 ]
