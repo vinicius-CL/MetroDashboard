@@ -168,6 +168,26 @@
         "className": ""
     },
     {
+        "id": "6c3063de6b44db72",
+        "type": "ui_tab",
+        "name": "Tab 2",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "e8192717fdd43381",
+        "type": "ui_group",
+        "name": "Filtros",
+        "tab": "6c3063de6b44db72",
+        "order": 2,
+        "disp": true,
+        "width": "5",
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "9973bf030ca284b8",
         "type": "postgreSQLConfig",
         "name": "",
@@ -191,26 +211,6 @@
         "userFieldType": "str",
         "password": "garsoftData2024",
         "passwordFieldType": "str"
-    },
-    {
-        "id": "6c3063de6b44db72",
-        "type": "ui_tab",
-        "name": "Tab 2",
-        "icon": "dashboard",
-        "order": 2,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "e8192717fdd43381",
-        "type": "ui_group",
-        "name": "Filtros",
-        "tab": "6c3063de6b44db72",
-        "order": 2,
-        "disp": true,
-        "width": "5",
-        "collapse": false,
-        "className": ""
     },
     {
         "id": "4da02ac4631fb0b4",
@@ -239,7 +239,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 1",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": true,
@@ -269,7 +269,9 @@
             [
                 "d3ede433c8660b18",
                 "51c39b502d279935",
-                "198d4d935011965e"
+                "198d4d935011965e",
+                "3ad0a58933027eb4",
+                "60f2e803317bcfcb"
             ]
         ]
     },
@@ -346,7 +348,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 680,
         "y": 280,
         "wires": [
             [
@@ -394,7 +396,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 560,
+        "x": 900,
         "y": 260,
         "wires": [
             []
@@ -413,7 +415,7 @@
         "targetType": "msg",
         "statusVal": "payload",
         "statusType": "auto",
-        "x": 540,
+        "x": 880,
         "y": 300,
         "wires": []
     },
@@ -434,28 +436,9 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 600,
+        "x": 940,
         "y": 220,
         "wires": []
-    },
-    {
-        "id": "51448dfe2c8a0513",
-        "type": "postgresql",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.payload.start_date }}}' and '{{{ msg.payload.end_date }}}'\nGROUP BY simple_date\nORDER BY simple_date;",
-        "postgreSQLConfig": "9973bf030ca284b8",
-        "split": false,
-        "rowsPerMsg": 1,
-        "outputs": 1,
-        "x": 670,
-        "y": 520,
-        "wires": [
-            [
-                "200f9076be604bc5",
-                "b255ada061bae768"
-            ]
-        ]
     },
     {
         "id": "8379cdb7fe2d6260",
@@ -539,25 +522,6 @@
         ]
     },
     {
-        "id": "d8efac61362ca361",
-        "type": "postgresql",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "query": "SELECT date_trunc('month', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.payload.start_date }}}' and '{{{ msg.payload.end_date }}}'\nGROUP BY simple_date\nORDER BY simple_date;",
-        "postgreSQLConfig": "9973bf030ca284b8",
-        "split": false,
-        "rowsPerMsg": 1,
-        "outputs": 1,
-        "x": 510,
-        "y": 400,
-        "wires": [
-            [
-                "2ab8321d2c363dbb",
-                "8379cdb7fe2d6260"
-            ]
-        ]
-    },
-    {
         "id": "2ab8321d2c363dbb",
         "type": "function",
         "z": "1c8b0c202345de2d",
@@ -619,25 +583,6 @@
         "y": 400,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "f722e5c3b482f5e7",
-        "type": "postgresql",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp  BETWEEN '2024-04-03 00:00:000' and '2024-04-04 00:00:000'\nGROUP BY simple_date\nORDER BY simple_date;",
-        "postgreSQLConfig": "9973bf030ca284b8",
-        "split": false,
-        "rowsPerMsg": 1,
-        "outputs": 1,
-        "x": 330,
-        "y": 940,
-        "wires": [
-            [
-                "19b04c091f966890",
-                "e58d8b8f2a39a469"
-            ]
         ]
     },
     {
@@ -718,24 +663,6 @@
         "wires": [
             [
                 "cfbf0969652138f2"
-            ]
-        ]
-    },
-    {
-        "id": "b99f2aadfe5216f0",
-        "type": "postgresql",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.start_date }}}' and '2024-02-01'\nGROUP BY simple_date\nORDER BY simple_date;",
-        "postgreSQLConfig": "9973bf030ca284b8",
-        "split": false,
-        "rowsPerMsg": 1,
-        "outputs": 1,
-        "x": 330,
-        "y": 800,
-        "wires": [
-            [
-                "3a9f0f6325f5dfa0"
             ]
         ]
     },
@@ -1087,7 +1014,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 8",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1104,7 +1031,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 9",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1114,5 +1041,126 @@
         "x": 680,
         "y": 600,
         "wires": []
+    },
+    {
+        "id": "51448dfe2c8a0513",
+        "type": "postgresql",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.payload.start_date }}}' and '{{{ msg.payload.end_date }}}'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "postgreSQLConfig": "9973bf030ca284b8",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 670,
+        "y": 520,
+        "wires": [
+            [
+                "200f9076be604bc5",
+                "b255ada061bae768"
+            ]
+        ]
+    },
+    {
+        "id": "d8efac61362ca361",
+        "type": "postgresql",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "query": "SELECT date_trunc('month', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.payload.start_date }}}' and '{{{ msg.payload.end_date }}}'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "postgreSQLConfig": "9973bf030ca284b8",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 510,
+        "y": 400,
+        "wires": [
+            [
+                "2ab8321d2c363dbb",
+                "8379cdb7fe2d6260"
+            ]
+        ]
+    },
+    {
+        "id": "f722e5c3b482f5e7",
+        "type": "postgresql",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp  BETWEEN '2024-04-03 00:00:000' and '2024-04-04 00:00:000'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "postgreSQLConfig": "9973bf030ca284b8",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 330,
+        "y": 940,
+        "wires": [
+            [
+                "19b04c091f966890",
+                "e58d8b8f2a39a469"
+            ]
+        ]
+    },
+    {
+        "id": "b99f2aadfe5216f0",
+        "type": "postgresql",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "query": "SELECT date_trunc('day', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN '{{{ msg.start_date }}}' and '2024-02-01'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "postgreSQLConfig": "9973bf030ca284b8",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 330,
+        "y": 800,
+        "wires": [
+            [
+                "3a9f0f6325f5dfa0"
+            ]
+        ]
+    },
+    {
+        "id": "3ad0a58933027eb4",
+        "type": "ui_gauge",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "group": "bba8abb3efe5e226",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 550,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "60f2e803317bcfcb",
+        "type": "function",
+        "z": "1c8b0c202345de2d",
+        "name": "function três",
+        "func": "var count = ((context.get(\"counter\") || 0) + msg.payload / (360 * 1000))\nmsg.payload = Math.round(count * 10000) / 10000;\ncontext.set(\"counter\", count);\nvar dt = new Date();\nif (dt.getHours() == 0 && dt.getMinutes() == 0 && dt.getSeconds() <= 30) {\n    context.set(\"counter\", 0);\n    msg.payload = 0;\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 260,
+        "wires": [
+            []
+        ]
     }
 ]
