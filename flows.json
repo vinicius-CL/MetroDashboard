@@ -41,7 +41,7 @@
     {
         "id": "11a6dcabfb56850d",
         "type": "ui_tab",
-        "name": "Tab1",
+        "name": "Uso diário",
         "icon": "dashboard",
         "disabled": false,
         "hidden": false
@@ -68,30 +68,30 @@
             "customTheme": {
                 "name": "Untitled Theme 1",
                 "default": "#4B7930",
-                "baseColor": "#ffe215",
+                "baseColor": "#001823",
                 "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
                 "reset": false
             },
             "themeState": {
                 "base-color": {
                     "default": "#ff8040",
-                    "value": "#ffe215",
+                    "value": "#001823",
                     "edited": true
                 },
                 "page-titlebar-backgroundColor": {
-                    "value": "#ffe215",
-                    "edited": false
+                    "value": "#003343",
+                    "edited": true
                 },
                 "page-backgroundColor": {
-                    "value": "#000000",
+                    "value": "#001823",
                     "edited": true
                 },
                 "page-sidebar-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
+                    "value": "#005164",
+                    "edited": true
                 },
                 "group-textColor": {
-                    "value": "#000000",
+                    "value": "#ffffff",
                     "edited": true
                 },
                 "group-borderColor": {
@@ -99,7 +99,7 @@
                     "edited": true
                 },
                 "group-backgroundColor": {
-                    "value": "#ffe215",
+                    "value": "#005164",
                     "edited": true
                 },
                 "widget-textColor": {
@@ -107,11 +107,11 @@
                     "edited": true
                 },
                 "widget-backgroundColor": {
-                    "value": "#ffe215",
+                    "value": "#001823",
                     "edited": false
                 },
                 "widget-borderColor": {
-                    "value": "#5b5b5b",
+                    "value": "#003343",
                     "edited": true
                 },
                 "base-font": {
@@ -148,7 +148,7 @@
     {
         "id": "bba8abb3efe5e226",
         "type": "ui_group",
-        "name": "Group 1",
+        "name": "Dados JE05",
         "tab": "11a6dcabfb56850d",
         "order": 1,
         "disp": true,
@@ -195,7 +195,7 @@
     {
         "id": "6c3063de6b44db72",
         "type": "ui_tab",
-        "name": "Tab 2",
+        "name": "Histórico Consumo",
         "icon": "dashboard",
         "order": 2,
         "disabled": false,
@@ -209,6 +209,27 @@
         "order": 2,
         "disp": true,
         "width": "5",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "237373e8f19714eb",
+        "type": "ui_spacer",
+        "z": "1c8b0c202345de2d",
+        "name": "spacer",
+        "group": "bba8abb3efe5e226",
+        "order": 4,
+        "width": "12",
+        "height": "1"
+    },
+    {
+        "id": "3da1a88e973e1236",
+        "type": "ui_group",
+        "name": "Base de dados",
+        "tab": "11a6dcabfb56850d",
+        "order": 2,
+        "disp": true,
+        "width": "6",
         "collapse": false,
         "className": ""
     },
@@ -239,7 +260,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 1",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": true,
@@ -296,10 +317,10 @@
         "z": "1c8b0c202345de2d",
         "name": "",
         "group": "bba8abb3efe5e226",
-        "order": 1,
+        "order": 3,
         "width": "0",
         "height": "0",
-        "label": "Consumo por unidade de tempo",
+        "label": "Potência atual",
         "chartType": "line",
         "legend": "true",
         "xformat": "HH:mm",
@@ -328,7 +349,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 610,
+        "x": 560,
         "y": 160,
         "wires": [
             []
@@ -362,10 +383,10 @@
         "z": "1c8b0c202345de2d",
         "name": "",
         "group": "bba8abb3efe5e226",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
-        "label": "Consumo KWh",
+        "label": "Consumo Acumulado (kWh)",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -394,7 +415,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 560,
+        "x": 600,
         "y": 260,
         "wires": [
             []
@@ -422,7 +443,7 @@
         "type": "ui_text",
         "z": "1c8b0c202345de2d",
         "group": "bba8abb3efe5e226",
-        "order": 3,
+        "order": 2,
         "width": 0,
         "height": 0,
         "name": "",
@@ -626,7 +647,7 @@
         "type": "postgresql",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "query": "SELECT date_trunc('hour', timestamp) AS simple_date,\n    SUM(consumo_ativo_acumulado_total) AS consumo_diario\nFROM consumo\nWHERE timestamp BETWEEN date '{{{ msg.start_date }}}' and '{{{ msg.end_date}}}'\nGROUP BY simple_date\nORDER BY simple_date;",
+        "query": "SELECT date_trunc('hour', timestamp) AS hour_interval,\n    AVG(potencia_aparente_total) AS potencia_hora\nFROM demanda\nWHERE timestamp BETWEEN date '{{{ msg.start_date }}}' and '{{{ msg.end_date}}}'\nGROUP BY hour_interval\nORDER BY hour_interval;",
         "postgreSQLConfig": "9973bf030ca284b8",
         "split": false,
         "rowsPerMsg": 1,
@@ -645,7 +666,7 @@
         "type": "function",
         "z": "1c8b0c202345de2d",
         "name": "function 7",
-        "func": "const data = msg.payload;\nconst horas = [];\nconst consumos = [];\n\nconst getDate = (date) => {\n    return date.getUTCHours();\n} \n\ndata.forEach(dt => {\n    var label = new Date(dt.simple_date);\n    horas.push(getDate(label));\n    consumos.push(dt.consumo_diario)    \n});\n\nmsg.payload = [{\n    'labels': horas,\n    'series': ['consumo'],\n    'data': [consumos]\n}];\nreturn msg;",
+        "func": "const data = msg.payload;\nconst horas = [];\nconst pot_avg = [];\n\nconst getDate = (date) => {\n    return date.getUTCHours();\n} \n\ndata.forEach(dt => {\n    var label = new Date(dt.hour_interval);\n    horas.push(getDate(label));\n    pot_avg.push(dt.potencia_hora)    \n});\n\nmsg.payload = [{\n    'labels': horas,\n    'series': ['Potência média',],\n    'data': [pot_avg]\n}];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -665,11 +686,11 @@
         "type": "ui_chart",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "group": "bba8abb3efe5e226",
-        "order": 6,
+        "group": "3da1a88e973e1236",
+        "order": 2,
         "width": 0,
         "height": 0,
-        "label": "Consumo Por Hora",
+        "label": "Potência média por hora",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -698,7 +719,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 950,
+        "x": 970,
         "y": 680,
         "wires": [
             []
@@ -716,7 +737,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
+        "x": 380,
         "y": 680,
         "wires": [
             [
@@ -981,9 +1002,9 @@
         "type": "ui_date_picker",
         "z": "1c8b0c202345de2d",
         "name": "",
-        "label": "date",
-        "group": "bba8abb3efe5e226",
-        "order": 5,
+        "label": "Dia",
+        "group": "3da1a88e973e1236",
+        "order": 1,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -1012,14 +1033,14 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "60",
         "crontab": "",
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 160,
+        "x": 150,
         "y": 680,
         "wires": [
             [
@@ -1039,8 +1060,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
-        "y": 740,
+        "x": 760,
+        "y": 720,
         "wires": []
     }
 ]
