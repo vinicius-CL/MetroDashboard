@@ -307,7 +307,7 @@
         "z": "1c8b0c202345de2d",
         "name": "",
         "group": "bba8abb3efe5e226",
-        "order": 1,
+        "order": 2,
         "width": 0,
         "height": 0,
         "label": "Potência atual",
@@ -362,53 +362,8 @@
         "wires": [
             [
                 "6e87f244d4348c1f",
-                "a2bcab0fd9d5ef1f",
                 "0b6aceeb98c9ca95"
             ]
-        ]
-    },
-    {
-        "id": "a2bcab0fd9d5ef1f",
-        "type": "ui_chart",
-        "z": "1c8b0c202345de2d",
-        "name": "",
-        "group": "bba8abb3efe5e226",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "label": "Consumo Acumulado (kWh)",
-        "chartType": "bar",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#ff8000",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 600,
-        "y": 260,
-        "wires": [
-            []
         ]
     },
     {
@@ -433,7 +388,7 @@
         "type": "ui_text",
         "z": "1c8b0c202345de2d",
         "group": "bba8abb3efe5e226",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
         "name": "",
@@ -499,7 +454,7 @@
         "legend": "false",
         "xformat": "HH:mm:ss",
         "interpolate": "linear",
-        "nodata": "",
+        "nodata": "Não há dados",
         "dot": false,
         "ymin": "",
         "ymax": "",
@@ -1043,7 +998,7 @@
         "type": "debug",
         "z": "1c8b0c202345de2d",
         "name": "debug 10",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1053,5 +1008,115 @@
         "x": 760,
         "y": 720,
         "wires": []
+    },
+    {
+        "id": "127db378616a43b5",
+        "type": "function",
+        "z": "1c8b0c202345de2d",
+        "name": "function 10",
+        "func": "var dt = new Date();\nvar timeKey = dt.getMinutes();\n\nvar labels = []\nvar data = []\n\nconst getUsers = () => Math.floor(Math.random() * 20);\n\nvar count = ((context.get(String(timeKey)) || 0) + getUsers())\ncontext.set(String(timeKey), count);\n\nfor(var i = 0; i < 60; i++) {\n    var value = context.get(String(i));\n    if (value) {\n        labels.push(i);\n        data.push(value)\n    }\n}\n\nmsg.payload = [{\n    'labels': labels,\n    'series': ['Usuarios'],\n    'data': [data]\n}]\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 820,
+        "wires": [
+            [
+                "6b2a35489f0177f7",
+                "9878fd9857abc032"
+            ]
+        ]
+    },
+    {
+        "id": "6b2a35489f0177f7",
+        "type": "debug",
+        "z": "1c8b0c202345de2d",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "9878fd9857abc032",
+        "type": "ui_chart",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "group": "bba8abb3efe5e226",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "População",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": true,
+        "useUTC": false,
+        "colors": [
+            "#ff8000",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 810,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2a05878d9501e35",
+        "type": "inject",
+        "z": "1c8b0c202345de2d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 820,
+        "wires": [
+            [
+                "127db378616a43b5"
+            ]
+        ]
     }
 ]
